@@ -23,6 +23,6 @@ defmodule Rna.Web.Router do
   scope "/api/v1", Rna.Web do
     pipe_through :api
 
-    get "/switches", SwitchController, :index
+    get "/switches/:ip", SwitchController, :show
   end
 end
