@@ -3,8 +3,7 @@ defmodule Rna.Umbrella.Mixfile do
 
   def project do
     [apps_path: "apps",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
+     build_embedded: Mix.env == :promanent: Mix.env == :prod,
      deps: deps()]
   end
 
@@ -23,6 +22,7 @@ defmodule Rna.Umbrella.Mixfile do
   defp deps do
     [
       {:net_snmp_elixir, git: "https://github.com/jonnystorm/net-snmp-elixir", app: false},
+      {:mib_2_elixir, git: "https://github.com/jonnystorm/mib-2-elixir", app: false},
       {:poison, "~> 3.1"},
       {:ex_doc, "~> 0.15", only: :dev}
     ]
