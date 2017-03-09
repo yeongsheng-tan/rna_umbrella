@@ -40,7 +40,8 @@ defmodule Rna.Web.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:rna, in_umbrella: true},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:poison, "~> 3.1"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
