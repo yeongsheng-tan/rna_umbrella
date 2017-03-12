@@ -1,0 +1,4 @@
+message SwitchInfo {
+  optional string value = 1;
+  optional uint32 type  = 2;
+}

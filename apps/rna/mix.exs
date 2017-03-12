@@ -21,7 +21,7 @@ defmodule Rna.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Rna.Application, []},
-     extra_applications: [:logger]]
+     extra_applications: [:logger, :exprotobuf]]
   end
 
   # Specifies which paths to compile per environment.
@@ -35,7 +35,8 @@ defmodule Rna.Mixfile do
     [{:postgrex, ">= 0.0.0"},
      {:ecto, "~> 2.1-rc"},
      {:net_snmp_elixir, git: "https://github.com/jonnystorm/net-snmp-elixir", app: false},
-     {:ex_doc, "~> 0.15", only: :dev}]
+     {:ex_doc, "~> 0.15", only: :dev},
+     {:exprotobuf, "~> 1.2.5"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
