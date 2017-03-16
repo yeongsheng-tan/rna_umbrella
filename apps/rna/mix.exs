@@ -34,10 +34,11 @@ defmodule Rna.Mixfile do
   defp deps do
     [{:postgrex, ">= 0.0.0"},
      {:ecto, "~> 2.1-rc"},
-     {:net_snmp_elixir, git: "https://github.com/jonnystorm/net-snmp-elixir", app: false},
-     {:ex_doc, "~> 0.15", only: :dev},
+     # {:snmp_ex, git: "https://github.com/jonnystorm/snmp-elixir.git"},
+     {:net_snmp_ex, git: "https://github.com/jonnystorm/net-snmp-elixir.git", app: false},
      {:exprotobuf, "~> 1.2.5"},
-     {:quantum, ">= 1.9.0"}]
+     {:quantum, ">= 1.9.0"},
+     {:ex_doc, "~> 0.15", only: :dev}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

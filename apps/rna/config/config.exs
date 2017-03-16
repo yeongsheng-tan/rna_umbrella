@@ -6,7 +6,7 @@ config :quantum,
 
 config :rna,
   ecto_repos: [Rna.Repo],
-  community_string: "public"
+  community_string: "hei1Eeto"
 
 config :quantum, rna: [
   cron: [
