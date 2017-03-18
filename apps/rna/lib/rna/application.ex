@@ -13,7 +13,7 @@ defmodule Rna.Application do
     import Supervisor.Spec, warn: false
 
     Supervisor.start_link([
-      worker(Rna.Repo, []),
+      # worker(Rna.Repo, []),
     ], strategy: :one_for_one, name: Rna.Supervisor)
   end
 end

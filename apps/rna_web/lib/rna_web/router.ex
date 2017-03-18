@@ -13,11 +13,11 @@ defmodule Rna.Web.Router do
     plug :accepts, ["json"]
   end
 
-  # scope "/", Rna.Web do
-  #   pipe_through :browser # Use the default browser stack
+  scope "/", Rna.Web do
+    pipe_through :browser # Use the default browser stack
 
-  #   get "/", PageController, :index
-  # end
+    get "/", PageController, :index
+  end
 
   # Other scopes may use custom stacks.
   scope "/api/v1", Rna.Web do

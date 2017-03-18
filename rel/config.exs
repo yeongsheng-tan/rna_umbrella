@@ -24,13 +24,13 @@ use Mix.Releases.Config,
 environment :dev do
   set dev_mode: true
   set include_erts: false
-  set cookie: :"*mHU3UK9e$V5>!C^<_~q}(aTAK3]rK.nuuBbsH4f6SF)Py=*BKN3PjRMf5I;MtGH"
+  set cookie: :"hTP::Bh?ub$R&2D(6K.0]k8~1*b,fxKAD%rb)eCO3<7N&iO!MU/>Y;Y?qWu<[=!8"
 end
 
 environment :prod do
   set include_erts: true
   set include_src: false
-  set cookie: :"&7wB>_wmqrlDXnRru5a;qf{Kfk)@c2`6lT`&^t@L*^[gQ%O{?ccKOHZuSFQ2OT[n"
+  set cookie: :"7r27jm$bx8]`Qw`z6J[rlI[&v)pd1kf`&focvHr}bk;Z{w%[TSC674(nPADnkZF$"
 end
 
 # You may define one or more releases in this file.
@@ -41,11 +41,11 @@ end
 release :rna_umbrella do
   set version: "0.1.0"
   set applications: [
-    rna: :permanent,
     rna_web: :permanent,
-    crontab: :load,
-    net_snmp_ex: :load,
-    exprotobuf: :load
+    rna: :permanent,
+    crontab: :permanent,
+    net_snmp_ex: :permanent,
+    exprotobuf: :permanent
   ]
 end
 

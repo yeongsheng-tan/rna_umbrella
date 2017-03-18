@@ -21,7 +21,7 @@ defmodule Rna.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Rna.Application, []},
-     extra_applications: [:logger, :quantum, :exprotobuf]]
+     extra_applications: [:logger, :runtime_tools, :quantum, :exprotobuf]]
   end
 
   # Specifies which paths to compile per environment.
@@ -34,7 +34,6 @@ defmodule Rna.Mixfile do
   defp deps do
     [{:postgrex, ">= 0.0.0"},
      {:ecto, "~> 2.1-rc"},
-     # {:snmp_ex, git: "https://github.com/jonnystorm/snmp-elixir.git"},
      {:net_snmp_ex, git: "https://github.com/jonnystorm/net-snmp-elixir.git", app: false},
      {:exprotobuf, "~> 1.2.5"},
      {:quantum, ">= 1.9.0"},
