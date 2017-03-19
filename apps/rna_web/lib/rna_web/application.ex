@@ -1,4 +1,8 @@
 defmodule Rna.Web.Application do
+  @moduledoc ~S"""
+  Phoenix OTP web endpoint application
+  """
+
   use Application
 
   def start(_type, _args) do
