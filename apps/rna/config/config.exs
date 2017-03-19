@@ -12,7 +12,7 @@ config :quantum, rna: [
   cron: [
     publish_switch_info: [
       # Every 1 minutes
-      schedule: "*/1 * * * *",
+      schedule: "*/5 * * * *",
       task: {Rna.Snmp, :gpb_encode_switch_info},
       args: ["172.30.65.149"]
     ]
