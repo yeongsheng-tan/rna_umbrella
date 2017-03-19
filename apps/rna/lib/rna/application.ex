@@ -13,7 +13,7 @@ defmodule Rna.Application do
     import Supervisor.Spec, warn: false
 
     # Pre-create a protected cache named table for snmp credentials (set)
-    :ets.new(:snmp_cred_store, [:set, :public, :named_table, read_concurrency: true])
+    :ets.new(:snmp_cred_store, [:ordered_set, :public, :named_table, read_concurrency: true])
 
     Supervisor.start_link([
       # worker(Rna.Repo, []),
