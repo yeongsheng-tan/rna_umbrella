@@ -20,7 +20,7 @@ defmodule Rna.Snmp do
   defp get_snmp_credential(ip_addr) do
     case :ets.lookup(:snmp_cred_store, ip_addr) do
       [] -> setup_snmp_cred(ip_addr)
-      [{ip_addr, snmp_cred}] -> snmp_cred
+      [{_ip_addr, snmp_cred}] -> snmp_cred
     end
   end
 

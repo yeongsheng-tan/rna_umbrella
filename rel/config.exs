@@ -40,6 +40,7 @@ end
 
 release :rna_umbrella do
   set version: "0.1.0"
+  set output_dir: './releases/rna_umbrella'
   set applications: [
     rna_web: :permanent,
     rna: :permanent,
