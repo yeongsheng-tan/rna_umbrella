@@ -1,5 +1,5 @@
 # ./docker-compose.yml
-umbrella:
+icx_manager:
   build: .
   dockerfile: ./docker/Dockerfile.build.elixir # That's our Dockerfile path
   env_file: .env # Set environment variables from an `.env` file, if needed

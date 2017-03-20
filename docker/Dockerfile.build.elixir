@@ -15,10 +15,9 @@ RUN /usr/local/bin/mix local.hex --force && \
 WORKDIR /app
 COPY . .
 
-RUN MIX_ENV=prod /usr/local/bin/mix do deps.update --all
-# RUN MIX_ENV=prod /usr/local/bin/mix do deps.update --all, compile.all
+RUN MIX_ENV=prod /usr/local/bin/mix do deps.get, phx.digest, release --env=prod
 # RUN /usr/local/bin/mix ecto.create && mix ecto.migrate
-RUN MIX_ENV=prod mix release --env=prod
+# RUN MIX_ENV=prod mix release --env=prod
 # RUN ls -alrth /app/releases && ls -alrth /app/releases/rna_umbrella && ls -alrth /app/releases/rna_umbrella/bin
 
 # CMD ["bash"]
