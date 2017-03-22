@@ -3,7 +3,8 @@ icx_manager:
   build: .
   dockerfile: ./docker/Dockerfile.build.elixir # That's our Dockerfile path
   env_file: .env # Set environment variables from an `.env` file, if needed
-  command: /app/releases/rna_umbrella/bin/rna_umbrella foreground # Start the server if no other command is specified
+  # Start the server if no other command is specified
+  command: /bin/bash -c "service rsyslog restart && /app/releases/rna_umbrella/bin/rna_umbrella foreground > /app/releases/rna_umbrella/var/log/production.log"
   environment:
     - MIX_ENV=prod # That's the environment mode, you know
     - PORT=9006
@@ -13,6 +14,7 @@ icx_manager:
     - .:/app # Here we're mounting our project's root directory inside the container
   ports:
     - "8006:9006"
+    - "514:514/udp"
   links:
     - postgres
 

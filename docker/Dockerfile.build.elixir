@@ -2,22 +2,25 @@ FROM elixir:1.4.2
 
 MAINTAINER Yeong Sheng Tan <tanyeongsheng@gmail.com>
 
-ENV REFRESHED_AT 2017-03-20
+ENV REFRESHED_AT 2017-03-22
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install hex
-RUN apt-get update && apt-get install -y snmp
+RUN apt-get update -q && apt-get upgrade -y && apt-get install -y htop netcat net-tools rsyslog snmp vim-nox
 RUN /usr/local/bin/mix local.hex --force && \
 /usr/local/bin/mix local.rebar --force && \
 /usr/local/bin/mix hex.info && \
 /usr/local/bin/mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez
 
+# Setup rsyslog client config and restart rsyslog
+COPY ./config/syslog/rsyslog.conf /etc/
+# Enable systemctl to startup rsyslog on container bootup
+# this assumes a full fledged init system; need to re-engineer for single purpose containers)
+RUN /bin/systemctl enable rsyslog
+
+# Copy app releases to target container
 WORKDIR /app
 COPY . .
 
 RUN MIX_ENV=prod /usr/local/bin/mix do deps.get, phx.digest, release --env=prod
 # RUN /usr/local/bin/mix ecto.create && mix ecto.migrate
-# RUN MIX_ENV=prod mix release --env=prod
-# RUN ls -alrth /app/releases && ls -alrth /app/releases/rna_umbrella && ls -alrth /app/releases/rna_umbrella/bin
-
-# CMD ["bash"]
