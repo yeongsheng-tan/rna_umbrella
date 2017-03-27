@@ -12,9 +12,13 @@ defmodule Rna.Snmp do
     snmp_obj
   end
 
-  def gpb_encode_switch_info(ip_addr) do
-    %SNMPMIB.Object{oid: _oid, type: type, value: val} = get_switch_info(ip_addr)
-    Rna.Protobufs.SwitchInfo.new(value: val, type: type) |> Rna.Protobufs.SwitchInfo.encode
+  def publish_switch_info(ip_addr) do
+    # %SNMPMIB.Object{oid: _oid, type: type, value: val} = get_switch_info(ip_addr)
+    # gpb_switch_info = SwitchInfo.new(value: val, type: type, encoded: :true, date: 2147483647, unit_price: 72.5011)
+    ip_addr
+    |> get_switch_info
+    |> Rna.GPBUtils.encode
+    |> Rna.MqttClient.publish
   end
 
   defp get_snmp_credential(ip_addr) do

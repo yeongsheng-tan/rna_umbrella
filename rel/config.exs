@@ -46,7 +46,8 @@ release :rna_umbrella do
     rna: :permanent,
     crontab: :permanent,
     net_snmp_ex: :permanent,
-    exprotobuf: :permanent
+    exprotobuf: :permanent,
+    bus: :permanent
   ]
 end
 
