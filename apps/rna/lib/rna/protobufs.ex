@@ -5,6 +5,6 @@ defmodule Rna.Protobufs do
   for use in corresponding MFA
   """
   # use Protobuf, from: Path.expand("../../proto/switch_info.proto", __DIR__), use_package_names: true, namespace: :"Elixir"
-  @external_resource "apps/rna/proto/switch_info.proto"
-  use Protox, files: [ "proto/switch_info.proto"]
+  @external_resource "./proto/switch_info.proto"
+  use Protox, files: [ "./proto/switch_info.proto"]
 end

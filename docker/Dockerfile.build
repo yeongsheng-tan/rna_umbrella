@@ -6,7 +6,7 @@ ENV REFRESHED_AT 2017-03-22
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install hex
-RUN apt-get update -q && apt-get upgrade -y && apt-get install -y htop netcat net-tools rsyslog snmp vim-nox
+RUN apt-get update -q && apt-get upgrade -y && apt-get install -y htop mosquitto mosquitto-clients netcat net-tools protobuf-compiler rsyslog snmp vim-nox
 RUN /usr/local/bin/mix local.hex --force && \
 /usr/local/bin/mix local.rebar --force && \
 /usr/local/bin/mix hex.info && \
@@ -22,5 +22,9 @@ RUN /bin/systemctl enable rsyslog
 WORKDIR /app
 COPY . .
 
-RUN MIX_ENV=prod /usr/local/bin/mix do deps.get, phx.digest, release --env=prod
+RUN MIX_ENV=prod /usr/local/bin/mix do deps.update --all, phx.digest, release --env=prod --upgrade
+RUN ls -alrth /app/releases/rna_umbrella/
+RUN ls -alrth /app/releases/rna_umbrella/releases
+
+# COPY . .
 # RUN /usr/local/bin/mix ecto.create && mix ecto.migrate

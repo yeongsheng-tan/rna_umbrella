@@ -1,9 +1,9 @@
-syntax = "proto3";
+syntax = "proto2";
 
 message SwitchInfo {
-  string value = 1;
-  uint32 type  = 2;
-  bool encoded = 3;
-  sint32 date = 4;
-  float unit_price = 5;
+  optional string value = 1;
+  optional uint32 type  = 2;
+  optional bool encoded = 3;
+  optional sint32 date = 4;
+  optional float unit_price = 5;
 }

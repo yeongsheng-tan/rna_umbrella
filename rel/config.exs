@@ -39,14 +39,14 @@ end
 # will be used by default
 
 release :rna_umbrella do
-  set version: "0.1.0"
+  set version: "0.2.0"
   set output_dir: './releases/rna_umbrella'
   set applications: [
     rna_web: :permanent,
     rna: :permanent,
     crontab: :permanent,
     net_snmp_ex: :permanent,
-    exprotobuf: :permanent,
+    # exprotobuf: :permanent,
     bus: :permanent
   ]
 end

@@ -1,20 +1,22 @@
 # ./docker-compose.yml
 icx_manager:
-  build: .
-  dockerfile: ./docker/Dockerfile.build.elixir # That's our Dockerfile path
+  # build: .
+  # dockerfile: ./docker/Dockerfile.build # That's our Dockerfile path
   env_file: .env # Set environment variables from an `.env` file, if needed
   # Start the server if no other command is specified
-  command: /bin/bash -c "service rsyslog restart && /app/releases/rna_umbrella/bin/rna_umbrella foreground"
+  command: /bin/bash -c "service rsyslog restart && service mosquitto restart && /app/releases/rna_umbrella/bin/rna_umbrella foreground"
   environment:
     - MIX_ENV=prod # That's the environment mode, you know
     - PORT=9066
     - PG_HOST=postgres
     - PG_USERNAME=postgres
-  volumes:
-    - .:/app # Here we're mounting our project's root directory inside the container
+  image: rnaumbrella_icx_manager:latest
+  # volumes:
+  #   - ./releases:/app # Here we're mounting our project's root directory inside the container
   ports:
     - "8066:9066"
     - "514:514/udp"
+    - "1883:1883"
   links:
     - postgres
 

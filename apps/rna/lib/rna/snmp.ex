@@ -4,14 +4,6 @@ defmodule Rna.Snmp do
   Also does GPB message encoding (this should be factored to another Module)
   """
 
-  def get_switch_info(ip_addr) do
-    agent = URI.parse "snmp://#{ip_addr}"
-    credential = get_snmp_credential(ip_addr)
-    sysname_object = SNMPMIB.object ".1.3.6.1.2.1.1.1.0", :string, ""
-    [ok: snmp_obj] = sysname_object |> NetSNMP.get(agent, credential)
-    snmp_obj
-  end
-
   def publish_switch_info(ip_addr) do
     # %SNMPMIB.Object{oid: _oid, type: type, value: val} = get_switch_info(ip_addr)
     # gpb_switch_info = SwitchInfo.new(value: val, type: type, encoded: :true, date: 2147483647, unit_price: 72.5011)
@@ -19,6 +11,14 @@ defmodule Rna.Snmp do
     |> get_switch_info
     |> Rna.GPBUtils.encode
     |> Rna.MqttClient.publish
+  end
+
+  def get_switch_info(ip_addr) do
+    agent = URI.parse "snmp://#{ip_addr}"
+    credential = get_snmp_credential(ip_addr)
+    sysname_object = SNMPMIB.object ".1.3.6.1.2.1.1.1.0", :string, ""
+    [ok: snmp_obj] = sysname_object |> NetSNMP.get(agent, credential)
+    snmp_obj
   end
 
   defp get_snmp_credential(ip_addr) do
