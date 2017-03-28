@@ -1,4 +1,4 @@
-FROM elixir:1.4.2
+FROM elixir:1.4.2-slim
 
 MAINTAINER Yeong Sheng Tan <tanyeongsheng@gmail.com>
 
@@ -6,17 +6,18 @@ ENV REFRESHED_AT 2017-03-22
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install hex
-RUN apt-get update -q && apt-get upgrade -y && apt-get install -y htop mosquitto mosquitto-clients netcat net-tools protobuf-compiler rsyslog snmp vim-nox
+RUN apt-get update -q && apt-get upgrade -y && apt-get install -y mosquitto mosquitto-clients protobuf-compiler snmp && \
+apt-get purge -y --auto-remove
 RUN /usr/local/bin/mix local.hex --force && \
 /usr/local/bin/mix local.rebar --force && \
 /usr/local/bin/mix hex.info && \
 /usr/local/bin/mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez
 
 # Setup rsyslog client config and restart rsyslog
-COPY ./config/syslog/rsyslog.conf /etc/
+# COPY ./config/syslog/rsyslog.conf /etc/
 # Enable systemctl to startup rsyslog on container bootup
 # this assumes a full fledged init system; need to re-engineer for single purpose containers)
-RUN /bin/systemctl enable rsyslog
+# RUN /bin/systemctl enable rsyslog
 
 # Copy app releases to target container
 WORKDIR /app
