@@ -23,8 +23,4 @@ WORKDIR /app
 COPY . .
 
 RUN MIX_ENV=prod /usr/local/bin/mix do deps.update --all, phx.digest, release --env=prod --upgrade
-RUN ls -alrth /app/releases/rna_umbrella/
-RUN ls -alrth /app/releases/rna_umbrella/releases
-
-# COPY . .
 # RUN /usr/local/bin/mix ecto.create && mix ecto.migrate
