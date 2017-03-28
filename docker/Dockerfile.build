@@ -6,12 +6,15 @@ ENV REFRESHED_AT 2017-03-22
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install hex
-RUN apt-get update -q && apt-get upgrade -y && apt-get install -y mosquitto mosquitto-clients protobuf-compiler snmp && \
-apt-get purge -y --auto-remove
-RUN /usr/local/bin/mix local.hex --force && \
-/usr/local/bin/mix local.rebar --force && \
-/usr/local/bin/mix hex.info && \
-/usr/local/bin/mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez
+RUN apt-get update -q && apt-get upgrade -y && \
+  apt-get install -y --no-install-recommends mosquitto mosquitto-clients protobuf-compiler snmp && \
+#  htop rsyslog netcat net-tools vim-nox && \
+  apt-get purge -y --auto-remove && \
+  rm -rf /var/lib/apt/lists/*
+RUN mix local.hex --force && \
+  mix local.rebar --force && \
+  mix hex.info && \
+  mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez
 
 # Setup rsyslog client config and restart rsyslog
 # COPY ./config/syslog/rsyslog.conf /etc/
@@ -20,8 +23,8 @@ RUN /usr/local/bin/mix local.hex --force && \
 # RUN /bin/systemctl enable rsyslog
 
 # Copy app releases to target container
+ENV MIX_ENV=prod
 WORKDIR /app
 COPY . .
 
-RUN MIX_ENV=prod /usr/local/bin/mix do deps.update --all, phx.digest, release --env=prod --upgrade
-# RUN /usr/local/bin/mix ecto.create && mix ecto.migrate
+RUN mix do deps.update --all, phx.digest, release --env=prod --upgrade
