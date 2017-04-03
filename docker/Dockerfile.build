@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install hex
 RUN apt-get update -q && apt-get upgrade -y && \
-  apt-get install -y --no-install-recommends mosquitto mosquitto-clients protobuf-compiler snmp && \
+  apt-get install -y --no-install-recommends git mosquitto mosquitto-clients protobuf-compiler snmp && \
 #  htop rsyslog netcat net-tools vim-nox && \
   apt-get purge -y --auto-remove && \
   rm -rf /var/lib/apt/lists/*

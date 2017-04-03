@@ -5,7 +5,9 @@ defmodule Rna.Umbrella.Mixfile do
     [apps_path: "apps",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps()]
+     deps: deps(),
+     app: :rna_umbrella,
+     version: "0.2.0"]
   end
 
   # Dependencies can be Hex packages:
@@ -21,7 +23,8 @@ defmodule Rna.Umbrella.Mixfile do
   # Dependencies listed here are available only for this project
   # and cannot be accessed from applications inside the apps folder
   defp deps do
-    [{:distillery, "~> 1.2"},
+    [{:distillery, "~> 1.1"},
+     {:mix_docker, "~> 0.3"},
      {:credo, "~> 0.7", only: [:dev, :test]}]
   end
 end

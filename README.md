@@ -10,3 +10,14 @@ A simple ICX SNMP query/response over REST API with Phoenix/Elixir PoC
 1. Startup phoenix umbrella app `mix phx.server` (i.e. rna_web and rna)
 1. Ensure you are in LAN (VPN or office) that can reach 172.30.65.x network
 1. From browser, hit URL http://localhost:4000/api/v1/switches/:interested_switch_ip_address
+
+
+### Build and run using docker-compose
+1. `docker-compose stop && docker-compose rm -v && docker-compose up -d icx_manager`
+1. Refer to :project_src_root_dir/docker-compose.yml and :project_src_root_dir/docker/Dockerfile.build for the details
+
+### Build and run using hex package mix_docker workflow
+1. `mix docker.build`
+1. `mix docker.release`
+1. `docker run -e PORT=9066 -p 1883:1883 -p 8000:9066 \-it --rm icx/icx_manager:release foreground`
+1. NOTE: Currently the above will immediately crash the container on startup; Reason being, The Mqtt.Bus app is unable to connect to a non-existant mosquitto broker, which the single purpose 'foreground' command will not start

@@ -1,0 +1,33 @@
+FROM leifg/elixir:latest
+
+MAINTAINER Yeong Sheng, Tan <tanyeongsheng@gmail.com>
+ENV REFRESHED_AT=2017-Mar-29 \
+    LANG=en_US.UTF-8 \
+    HOME=/opt/app/ \
+    TERM=xterm
+
+RUN \
+    echo "@edge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
+    apk --no-cache update && \
+    apk --no-cache upgrade && \
+    apk --no-cache --update add \
+      libgcc libstdc++ \
+      supervisor mosquitto@edge protobuf@edge \
+      net-snmp@edge net-snmp-libs@edge net-snmp-tools@edge net-snmp-perl@edge \
+      curl "libpq@edge<9.7" "postgresql-client@edge<9.7" "postgresql@edge<9.7" "postgresql-contrib@edge<9.7" && \
+    mkdir /docker-entrypoint-initdb.d /var/log/supervisord /var/log/rna_umbrella && \
+    curl -o /usr/local/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.2/gosu-amd64" && \
+    chmod +x /usr/local/bin/gosu && \
+    apk del curl && \
+    rm -rf /var/cache/apk/*
+
+ENV PGDATA /var/lib/postgresql/data MIX_ENV=prod REPLACE_OS_VARS=true SHELL=/bin/sh
+VOLUME /var/lib/postgresql/data
+
+COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/ 
+COPY config/postgres/postgres_init /
+RUN chmod +x /postgres_init
+WORKDIR /opt/app
+ADD rna_umbrella.tar.gz ./
+
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

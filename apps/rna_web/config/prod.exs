@@ -15,11 +15,13 @@ use Mix.Config
 # which you typically run after static files are built.
 config :rna_web, Rna.Web.Endpoint,
   on_init: {Rna.Web.Endpoint, :load_from_system_env, []},
-  url: [host: "rna.com", port: 80],
   server: true,
+  # http: [port: {:system, "PORT"}],
+  # url: [host: "${APP_DOMAIN}", port: {:system, "PORT"}],
+  url: [host: "rna.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
-config :logger, level: :info
+config :logger, level: :debug
 
 # ## SSL Support
 #
