@@ -16,3 +16,4 @@ config :rna, Rna.Repo,
   password: "postgres",
   database: "rna_prod",
   pool_size: 15
+use Mix.Config

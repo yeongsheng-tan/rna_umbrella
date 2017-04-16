@@ -12,7 +12,10 @@ ENV REFRESHED_AT 2017-03-22 \
 
 # Install hex
 RUN apt-get update -q && apt-get upgrade -y && \
-  apt-get install -y --no-install-recommends ca-certificates git protobuf-compiler snmp && \
+  apt-get install -y --no-install-recommends \
+    ca-certificates git protobuf-compiler snmp \
+    git mosquitto protobuf-compiler snmp && \
+  # htop rsyslog netcat net-tools vim-nox && \
   apt-get purge -y --auto-remove && \
   update-ca-certificates && \
   rm -rf /var/lib/apt/lists/*
@@ -39,7 +42,6 @@ RUN mix do deps.get, deps.compile
 
 COPY . .
 
-# RUN mix release --profile=rna_umbrella:prod --verbose # --upgrade
 RUN mix do phx.digest, release --profile=rna_umbrella:prod --verbose && \
     tar xzf ./_build/prod/rel/rna_umbrella/releases/0.3.0/rna_umbrella.tar.gz && \
     rm -rf ./_build ./apps ./mix.*

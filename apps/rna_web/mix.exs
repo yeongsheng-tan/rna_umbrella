@@ -3,7 +3,7 @@ defmodule Rna.Web.Mixfile do
 
   def project do
     [app: :rna_web,
-     version: "0.0.1",
+     version: "0.3.0",
      build_path: "../../_build",
      config_path: "../../config/config.exs",
      deps_path: "../../deps",
@@ -22,7 +22,7 @@ defmodule Rna.Web.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Rna.Web.Application, []},
-     extra_applications: [:logger, :runtime_tools]]
+     extra_applications: [:logger, :runtime_tools, :rna]]
   end
 
   # Specifies which paths to compile per environment.
@@ -35,13 +35,13 @@ defmodule Rna.Web.Mixfile do
   defp deps do
     [{:phoenix, "~> 1.3.0-rc"},
      {:phoenix_pubsub, "~> 1.0"},
-     {:phoenix_ecto, "~> 3.2"},
      {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:poison, "~> 3.1"},
-     {:rna, in_umbrella: true}]
+     {:rna, in_umbrella: true}
+    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
@@ -49,6 +49,6 @@ defmodule Rna.Web.Mixfile do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    ["test": ["ecto.create --quiet", "ecto.migrate", "test"]]
+    []
   end
 end

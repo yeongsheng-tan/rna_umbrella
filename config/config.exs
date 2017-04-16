@@ -14,10 +14,20 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-config :mix_docker,
-  image: "icx/icx_manager",
-  dockerfile_build: "./Dockerfile.build",
-  dockerfile_release: "./Dockerfile.release"
+# config :mix_docker,
+#   image: "icx/icx_manager_rna_umbrella",
+#   dockerfile_build: "./Dockerfile.build.rna_umbrella",
+#   dockerfile_release: "./Dockerfile.release.rna_umbrella"
+
+# config :mix_docker,
+#   image: "icx/icx_manager_rna",
+#   dockerfile_build: "./Dockerfile.build.rna",
+#   dockerfile_release: "./Dockerfile.release.rna"
+
+# config :mix_docker,
+#   image: "icx/icx_manager_rna_web",
+#   dockerfile_build: "./Dockerfile.build.rna_web",
+#   dockerfile_release: "./Dockerfile.release.rna_web"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

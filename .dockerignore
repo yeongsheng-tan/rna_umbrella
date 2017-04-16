@@ -9,7 +9,9 @@ docker-compose.yml
 
 # Mix artifacts
 _build
+cover
 deps
+doc
 *.ez
 
 # Generate on crash by the VM

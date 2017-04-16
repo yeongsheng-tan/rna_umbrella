@@ -7,8 +7,7 @@ use Mix.Config
 
 # General application configuration
 config :rna_web,
-  namespace: Rna.Web,
-  ecto_repos: [Rna.Repo]
+  namespace: Rna.Web
 
 # Configures the endpoint
 config :rna_web, Rna.Web.Endpoint,

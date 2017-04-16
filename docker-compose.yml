@@ -1,23 +1,58 @@
-# ./docker-compose.yml
-icx_manager:
-  build: .
-  dockerfile: ./docker/Dockerfile.build # That's our Dockerfile path
-  env_file: .env # Set environment variables from an `.env` file, if needed
-  # Start the server if no other command is specified
-  command: /bin/bash -c "service rsyslog restart && service mosquitto restart && /app/rel/rna_umbrella/bin/rna_umbrella foreground"
-  environment:
-    - MIX_ENV=prod # That's the environment mode, you know
-    - PORT=9066
-    - PG_HOST=postgres
-    - PG_USERNAME=postgres
-  ports:
-    - "8066:9066"
-    - "514:514/udp"
-    - "1883:1883"
-  links:
-    - postgres
+version: "3"
+services:
+  icx_manager:
+    image: elixirsg_alp/rna_umbrella:release
+    command: /opt/app/bin/rna_umbrella foreground
+    environment:
+      - MIX_ENV=prod
+      - PORT=9000
+      - PG_HOST=postgres
+      - PG_USERNAME=postgres
+    hostname: icx
+    domainname: icx.com
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.2.100
+    ports:
+      - "8000:9000"
+    depends_on:
+      # - postgres
+      - mosquitto_broker1
+      - mosquitto_broker2
 
-postgres:
-  image: postgres:9.6.2 # https://hub.docker.com/_/postgres/
-  ports:
-    - "5432"
+  # postgres:
+  #   image: postgres:9.6.2
+  #   networks:
+  #     vpcbr:
+  #       ipv4_address: 10.5.2.10
+  #   ports:
+  #     - "5432"
+
+  mosquitto_broker1:
+    image: erlio/docker-vernemq
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.2.50
+    ports:
+      - "3883:1883"
+    environment:
+      - DOCKER_VERNEMQ_ALLOW_ANONYMOUS=on
+
+  mosquitto_broker2:
+    image: erlio/docker-vernemq 
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.2.52
+    environment:
+      - DOCKER_VERNEMQ_ALLOW_ANONYMOUS=on 
+      - DOCKER_VERNEMQ_DISCOVERY_NODE=10.5.2.50
+    depends_on:
+      - mosquitto_broker1
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.5.2.0/16

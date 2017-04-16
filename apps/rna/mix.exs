@@ -3,7 +3,7 @@ defmodule Rna.Mixfile do
 
   def project do
     [app: :rna,
-     version: "0.0.2",
+     version: "0.3.0",
      build_path: "../../_build",
      config_path: "../../config/config.exs",
      deps_path: "../../deps",
@@ -21,7 +21,6 @@ defmodule Rna.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Rna.Application, []},
-     # extra_applications: [:logger, :runtime_tools, :quantum, :exprotobuf, :bus]]
      extra_applications: [:logger, :runtime_tools, :quantum, :bus]]
   end
 
@@ -33,25 +32,15 @@ defmodule Rna.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:postgrex, ">= 0.0.0"},
-     {:ecto, "~> 2.1-rc"},
-     {:net_snmp_ex, git: "https://github.com/jonnystorm/net-snmp-elixir.git", app: false},
-     # {:exprotobuf, "~> 1.2.5"},
+    [{:net_snmp_ex, git: "https://github.com/jonnystorm/net-snmp-elixir.git", app: false},
      {:protox, "~> 0.12"},
-     {:quantum, ">= 1.9.0"},
+     {:quantum, "~> 1.9"},
      {:bus, "~> 0.1.4"},
-     {:ex_doc, "~> 0.15", only: :dev}]
+     {:ex_doc, "~> 0.15", only: :dev}
+    ]
   end
 
-  # Aliases are shortcuts or tasks specific to the current project.
-  # For example, to create, migrate and run the seeds file at once:
-  #
-  #     $ mix ecto.setup
-  #
-  # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-     "ecto.reset": ["ecto.drop", "ecto.setup"],
-     "test": ["ecto.create --quiet", "ecto.migrate", "test"]]
+    []
   end
 end

@@ -1,0 +1,23 @@
+FROM leifg/elixir:latest
+
+MAINTAINER Yeong Sheng, Tan <tanyeongsheng@gmail.com>
+ENV REFRESHED_AT=2017-Mar-29 \
+    SHELL=/bin/sh \
+    LANG=en_US.UTF-8 \
+    LC_ALL=${LANG} \
+    HOME=/opt/app/ \
+    TERM=xterm
+
+RUN \
+    echo "@edge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
+    apk --no-cache update && \
+    apk --no-cache upgrade && \
+    apk --no-cache --update add \
+      libgcc libstdc++ protobuf@edge \
+      net-snmp@edge net-snmp-libs@edge net-snmp-tools@edge net-snmp-perl@edge && \
+    rm -rf /var/cache/apk/*
+
+ENV MIX_ENV=prod REPLACE_OS_VARS=true
+
+WORKDIR /opt/app
+ADD rna_umbrella.tar.gz ./

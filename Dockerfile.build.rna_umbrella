@@ -3,23 +3,24 @@ FROM leifg/elixir:latest
 MAINTAINER Yeong Sheng, Tan <tanyeongsheng@gmail.com>
 # Tooling from hex mix_docker expects app install to be in /opt/app
 ENV REFRESHED_AT=2017-Mar-29 \
+    SHELL=/bin/sh \
     LANG=en_US.UTF-8 \
+    LC_ALL=${LANG} \
     HOME=/opt/app/ \
     TERM=xterm
 
-# Install Elixir and basic build dependencies
 # Base Erlang packages required:
-# erlang-kernel (19.1.0-r0)
-# erlang-stdlib (19.1.0-r0)
-# erlang-compiler (19.1.0-r0)
-# erlang (19.1.0-r0)
-# erlang-inets (19.1.0-r0)
-# erlang-ssl (19.1.0-r0)
-# erlang-public-key (19.1.0-r0)
-# erlang-asn1 (19.1.0-r0)
-# erlang-sasl (19.1.0-r0)
-# erlang-erl-interface (19.1.0-r0)
-# erlang-dev (19.1.0-r0)
+# erlang-kernel (19.3.0-r0)
+# erlang-stdlib (19.3.0-r0)
+# erlang-compiler (19.3.0-r0)
+# erlang (19.3.0-r0)
+# erlang-inets (19.3.0-r0)
+# erlang-ssl (19.3.0-r0)
+# erlang-public-key (19.3.0-r0)
+# erlang-asn1 (19.3.0-r0)
+# erlang-sasl (19.3.0-r0)
+# erlang-erl-interface (19.3.0-r0)
+# erlang-dev (19.3.0-r0)
 
 RUN \
     echo "@edge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
@@ -34,10 +35,21 @@ RUN mix local.hex --force && \
     mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez && \
     mix hex.info
 
+ENV MIX_ENV=prod REPLACE_OS_VARS=true
 WORKDIR /opt/app
 
-ENV MIX_ENV=prod
-
 # Cache elixir deps
-COPY . . 
-RUN mix do deps.update --all, deps.compile, phx.digest, release --env=prod --verbose
+COPY mix.exs mix.lock ./
+
+RUN mkdir -p apps/rna/config
+COPY apps/rna/mix.exs apps/rna/
+COPY apps/rna/config/* apps/rna/config/
+
+RUN mkdir -p apps/rna_web/config
+COPY apps/rna_web/mix.exs apps/rna_web/
+COPY apps/rna_web/config/* apps/rna_web/config/
+
+RUN mix do deps.get, deps.compile
+COPY . .
+
+RUN mix do phx.digest, release --profile=rna_umbrella:prod --verbose

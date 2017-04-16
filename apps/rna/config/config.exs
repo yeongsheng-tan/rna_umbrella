@@ -14,12 +14,13 @@ config :quantum, rna: [
       # Every 1 minutes
       schedule: "*/1 * * * *",
       task: {Rna.Snmp, :publish_switch_info},
-      args: ["172.30.65.149"]
+      args: ["demo.snmplabs.com"]
     ]
   ]
 ]
 
 config :bus,
+  # host: '10.5.2.50',
   host: 'localhost',
  	port: 1883,
  	client_id: "Rna.SNMP_Poller", #needs to be string.
@@ -29,3 +30,4 @@ config :bus,
   callback: Rna.MqttClient #callback module, you need to implement callback inside.
 
 import_config "#{Mix.env}.exs"
+ 
