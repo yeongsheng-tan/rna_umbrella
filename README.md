@@ -8,11 +8,17 @@ A simple ICX SNMP query/response over REST API with Phoenix/Elixir PoC
 4. Update local hex packages index `mix local.hex`
 5. From root of this project install dependencies `mix deps.get`
 6. Startup phoenix umbrella app `mix phx.server` (i.e. rna_web and rna)
-7. Ensure you are in LAN (VPN or office) that can reach 172.30.65.x network
-8. From browser, hit URL http://localhost:4000/api/v1/switches/:interested_switch_ip_address
+7. From browser, hit URL http://localhost:4000/api/v1/switches/:interested_switch_ip_address
 
+### Workflow #1: Docker build, docker release docker-compose workflow using alpine docker images (single-purposed containers) 
+1. `docker build -f Dockerfile.build.rna_umbrella -t elixirsg_alp/rna_umbrella:build .`
+2. `docker create --name rna_umb_tmp elixirsg_alp/rna_umbrella:build`
+3. `docker cp rna_umb_tmp:/opt/app/_build/prod/rel/rna_umbrella/releases/0.3.0/rna_umbrella.tar.gz .`
+4. `docker rm -f rna_umb_tmp`
+5. `docker build -f Dockerfile.release.rna_umbrella -t elixirsg_alp/rna_umbrella:release .`
+6. `docker-compose up -d`
 
-### Workflow #1: Build and run using docker-compose
+### Workflow #2: Build and run using docker-compose (using All-in-One with debian base docker images)
 1. `docker-compose stop && docker-compose rm -v && docker-compose up -d icx_manager`
 2. Refer to :project_src_root_dir/docker-compose.yml and :project_src_root_dir/docker/Dockerfile.build for the details
 
@@ -32,9 +38,9 @@ A simple ICX SNMP query/response over REST API with Phoenix/Elixir PoC
 7. Build target runtime docker container env and unpack packaged application into the runtime 'release' container image and define necessary ENTRY_POINT command on container run
   1. `mix docker.release`
 8. Startup and run the release container image
-  1. `docker run -d --name icx_manager_aio -e PORT=8000 -p 3883:1883 -p 8000:8000 -it --rm icx/icx_manager:release`
+  1. `docker run -d --name icx_manager_aio -e PORT=9000 -p 3883:1883 -p 8000:9000 -it --rm icx/icx_manager:release`
 9. Connect to above running instance of container via a remote console iex shell
   1. `docker exec -it icx_manager_aio /opt/app/bin/rna_umbrella remote_console`
 10. Test run a known public API
   1. Using the above remote console iex shell:
-    1. `Rna.Snmp.get_switch_info("172.30.65.149")`
+    1. `Rna.Snmp.get_switch_info("demo.snmplabs.com")`

@@ -18,8 +18,8 @@ doc
 erl_crash.dump
 
 # Static artifacts if you're using Phoenix if it's an umbrella app change the paths
-node_modules
-priv
+apps/rna_web/node_modules
+apps/rna_web/priv
 
 # any other directories that have files that don't need to be included in the build
 # these are specific to the sample project
