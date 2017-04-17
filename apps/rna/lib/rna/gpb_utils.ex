@@ -1,6 +1,5 @@
 defmodule Rna.GPBUtils do
   def encode(%SNMPMIB.Object{oid: _oid, type: type, value: val}) do
-    # message = SwitchInfo.encode(gpb_switch_info)
     now = DateTime.utc_now() |> DateTime.to_unix()
     gpb_switch_info_encoded = %SwitchInfo{value: val, type: type, encoded: :true, date: now, unit_price: 7250.725012345}
     |> Protox.Encode.encode()

@@ -16,17 +16,17 @@ services:
     ports:
       - "8000:9000"
     depends_on:
-      # - postgres
+      - postgres
       - mosquitto_broker1
       - mosquitto_broker2
 
-  # postgres:
-  #   image: postgres:9.6.2
-  #   networks:
-  #     vpcbr:
-  #       ipv4_address: 10.5.2.10
-  #   ports:
-  #     - "5432"
+  postgres:
+    image: postgres:9.6.2
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.2.10
+    ports:
+      - "5432"
 
   mosquitto_broker1:
     image: erlio/docker-vernemq

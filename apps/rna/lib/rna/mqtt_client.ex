@@ -1,6 +1,6 @@
 defmodule Rna.MqttClient do
   def on_message_received(topic, payload) do
-    IO.inspect "on_message_received: Topic -> #{topic} |\n #{payload}" 
+    IO.inspect "on_message_received: Topic -> #{topic} |\n #{payload}"
   end
 
   def on_error(err) do
