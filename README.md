@@ -10,13 +10,41 @@ A simple ICX SNMP query/response over REST API with Phoenix/Elixir PoC
 6. Startup phoenix umbrella app `mix phx.server` (i.e. rna_web and rna)
 7. From browser, hit URL http://localhost:4000/api/v1/switches/:interested_switch_ip_address
 
-### Workflow #1: Docker build, docker release docker-compose workflow using alpine docker images (single-purposed containers) 
+### Workflow #1: Docker build, docker release docker-compose workflow using alpine docker images (single-purposed containers)
 1. `docker build -f Dockerfile.build.rna_umbrella -t elixirsg_alp/rna_umbrella:build .`
 2. `docker create --name rna_umb_tmp elixirsg_alp/rna_umbrella:build`
 3. `docker cp rna_umb_tmp:/opt/app/_build/prod/rel/rna_umbrella/releases/0.3.0/rna_umbrella.tar.gz .`
 4. `docker rm -f rna_umb_tmp`
 5. `docker build -f Dockerfile.release.rna_umbrella -t elixirsg_alp/rna_umbrella:release .`
 6. `docker-compose up -d`
+7. See your web app up and running at http://<your_docker_engine_host_ip>:8000 (e.g. http://172.30.64.135:8000 - the typical phoenix webapp landing page)
+8. Test the REST API endpoint using your browser http://<your_docker_engine_host_ip>:8000/api/v1/switches/demo.snmplabs.com
+  1. You should see a response similar to the below on your browser:
+  ```
+  "{\"value\":\"Linux zeus 4.8.6.5-smp #2 SMP Sun Nov 13 14:58:11 CDT 2016 i686\",\"type\":4,\"oid\":[1,3,6,1,2,1,1,1,0]}"
+  ```
+10. Test your REST API endpoint using `curl`:
+  1. `curl --header "Accept:application/json" http://172.30.64.135:8000/api/v1/switches/demo.snmplabs.com`
+  2. Response expected:
+  ```
+  "{\"value\":\"Linux zeus 4.8.6.5-smp #2 SMP Sun Nov 13 14:58:11 CDT 2016 i686\",\"type\":4,\"oid\":[1,3,6,1,2,1,1,1,0]}"
+  ```
+11. Install a local mosquitto_client (e.g. `brew install mosquitto`)
+12. Startup a local mosquitto client subscriber to receive published GPB payload over mqtt from your app container:
+  1. `mosquitto_sub -h <your_docker_engine_host_ip> -p 3883 -t "#"` (assuming you are testing this over a connected machine in same network as the docker-engine host)
+  2. You should see something similar to the below every 1 minute interval:
+  ```
+  ?Linux zeus 4.8.6.5-smp #2 SMP Sun Nov 13 14:58:11 CDT 2016 i686
+                                                                 -͕
+  ?Linux zeus 4.8.6.5-smp #2 SMP Sun Nov 13 14:58:11 CDT 2016 i686 ġ
+                                                                    -͕
+
+  ?Linux zeus 4.8.6.5-smp #2 SMP Sun Nov 13 14:58:11 CDT 2016 i686 š
+                                                                    -͕
+
+  ?Linux zeus 4.8.6.5-smp #2 SMP Sun Nov 13 14:58:11 CDT 2016 i686 ơ
+                                                                    -͕
+  ```
 
 ### Workflow #2: Build and run using docker-compose (using All-in-One with debian base docker images)
 1. `docker-compose stop && docker-compose rm -v && docker-compose up -d icx_manager`
