@@ -1,0 +1,101 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+VAGRANTFILE_API_VERSION = 2
+Vagrant.require_version("> 2.0.1")
+ENV["LC_ALL"] = "en_US.UTF-8"
+
+$box = 'rancheros'
+$rancher_version = 'latest'
+$ip_prefix = "172.3.65"
+$disable_folder_sync = true
+
+# install the vagrant-rancher provisioner plugin if
+# it is not already installed
+unless Vagrant.has_plugin?('vagrant-rancher')
+  puts 'vagrant-rancher plugin not found, installing...'
+  `vagrant plugin install vagrant-rancher`
+  abort 'vagrant-rancher plugin installed, but you need to rerun the vagrant command'
+end
+
+# require some capability overrides if the box is rancheros
+if $box == 'rancheros'
+  require_relative 'lib/vagrant_rancheros_guest_plugin.rb'
+end
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://atlas.hashicorp.com/search.
+  # config.vm.box = "rancherio/rancheros"
+  config.vm.box = 'rancheros'
+  # https://s3-ap-southeast-1.amazonaws.com/ruckuslbs-sg/ICX_RancherOS_Base/boxes/rancheros_v0.9.0.box
+  config.vm.box_url = 'https://s3-ap-southeast-1.amazonaws.com/ruckuslbs-sg/ICX_RancherOS_Base/boxes/rancheros_v0.9.0.box'
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  config.vm.network "forwarded_port", guest: 80, host: 8000, auto_correct: true, adapter: 1
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  ip = $ip_prefix + '.10'
+  config.vm.network "private_network", ip: ip, adapter: 2
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+  if $disable_folder_sync
+    config.vm.synced_folder '.', '/vagrant', disabled: true
+  else
+    # use rsync when box is rancheros
+    # otherwise stick with the vagrant defaults
+    if $box == 'rancheros'
+      config.vm.synced_folder ".", "/vagrant", type: "rsync",
+                              rsync__exclude: ".git/",
+                              rsync__args: ["--verbose", "--archive", "--delete", "--copy-links"],
+                              disabled: false
+    else
+      config.vm.synced_folder '.', '/vagrant', disabled: false
+    end
+  end
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  config.vm.provider "virtualbox" do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    # vb.gui = true
+    # Customize the amount of memory on the VM:
+    vb.memory = "2048"
+
+    # config.vm.provision :rancher do |rancher|
+    #   rancher.role = 'server'
+    #   rancher.hostname = ip
+    #   rancher.version = $rancher_version
+    #   rancher.deactivate = true
+    #   rancher.install_agent = false
+    #   # rancher.labels = box['labels'] unless box['labels'].nil?
+    #   # rancher.project = box['project'] unless box['project'].nil?
+    #   rancher.project_type = 'cattle' # accepts one of ['cattle', 'swarm', 'kubernetes']
+    # end
+  end
+  #
+  # View the documentation for the provider you are using for more
+  # information on available options.
+
+  # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
+  # such as FTP and Heroku are also available. See the documentation at
+  # https://docs.vagrantup.com/v2/push/atlas.html for more information.
+  # config.push.define "atlas" do |push|
+  #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
+  # end
+end

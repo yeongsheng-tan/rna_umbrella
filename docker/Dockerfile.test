@@ -1,0 +1,65 @@
+FROM bitwalker/alpine-elixir:1.6.1
+
+MAINTAINER Yeong Sheng, Tan <tanyeongsheng@gmail.com>
+ENV REFRESHED_AT=2016-Jan-31 \
+    SHELL=/bin/sh \
+    LANG=en_US.UTF-8 \
+    LC_ALL=${LANG} \
+    LANGUAGE=en_US:en \
+    # HOME=/var/lib \
+    TERM=xterm \
+    PGDATA=/var/lib/postgresql/data \
+    PGUSER=postgres \
+    PGPASSWORD=postgres \
+    REPLACE_OS_VARS=true \
+    PYTHONIOENCODING=UTF-8 \
+    PHANTOMJS_VERSION=2.1.12 \
+    REDIS_VERSION=3.2.11 \
+    MIX_ENV=test
+
+COPY scripts/postgres-entrypoint.sh /
+COPY scripts/redis-entrypoint.sh /
+COPY scripts/mqtt-entrypoint.sh /
+COPY config/supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+RUN set -exo pipefail \
+  echo "@edge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
+  apk update --no-cache \
+  && apk upgrade --no-cache \
+  && apk add --no-cache --update \
+    autoconf build-base curl ca-certificates g++@edge git@edge glances@edge \
+    libgcc@edge libstdc++@edge make@edge ncurses-dev netcat-openbsd net-tools@edge \
+    openssh-client openssl openssl-dev parallel perl-dev protobuf@edge \
+    python2@edge python2-dev@edge py2-pip@edge nodejs@edge nodejs-npm@edge \
+    rsyslog ruby ruby-bundler ruby-json supervisor@edge tar unixodbc-dev vim@edge zlib-dev \
+    net-snmp@edge net-snmp-libs@edge net-snmp-tools@edge net-snmp-perl@edge \
+    "libpq@edge" "postgresql-client@edge" "postgresql@edge" "postgresql-contrib@edge" \
+    mosquitto@edge mosquitto-clients@edge redis@edge tftp-hpa \
+  && apk --no-cache --update --allow-untrusted --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ add arp-scan@edge \
+  && rm -rf /var/cache/apk/* \
+  # Download and install gosu for starting postgresql server and redis-server processes
+  # https://github.com/tianon/gosu
+  && wget -O /usr/local/bin/gosu https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 \
+  && chmod +x /usr/local/bin/gosu \
+  && mkdir -p /etc/supervisor/conf.d \
+  # give execution permissions to entrypoint shells
+  && chmod +x /postgres-entrypoint.sh /redis-entrypoint.sh /mqtt-entrypoint.sh
+
+# Prep volume dir for postgresql, redis-server, mosquitto broker and tftp-hpa
+VOLUME ["/var/lib/postgresql/data", "/var/lib/redis/data", "/var/lib/mosquitto/data", "/var/log/mosquitto", "/var/tftpboot", "/var/log/supervisord", "/var/log/rna_spike"]
+
+WORKDIR /
+
+RUN \
+  # Install foreman and danger gem globally
+  gem install foreman --no-document \
+  # Install brunch and phantomjs globally
+  && npm install yarn -g \
+  && yarn add global brunch "phantomjs-prebuilt@${PHANTOMJS_VERSION}" chromedriver selenium \
+  # Install hex+rebar
+  && mix local.hex --force \
+  && mix local.rebar --force \
+  && mix hex.info
+
+EXPOSE 69/udp 1883 5432 6379
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

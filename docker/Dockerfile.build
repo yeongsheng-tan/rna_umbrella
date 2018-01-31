@@ -1,8 +1,8 @@
-FROM elixir:1.4.2-slim
+FROM elixir:1.6.1-slim
 
 MAINTAINER Yeong Sheng Tan <tanyeongsheng@gmail.com>
 
-ENV REFRESHED_AT 2017-03-22 \
+ENV REFRESHED_AT 2018-01-31 \
     DEBIAN_FRONTEND=noninteractive \
     SHELL=/bin/sh \
     LANG=en_US.UTF-8 \
@@ -21,7 +21,6 @@ RUN apt-get update -q && apt-get upgrade -y && \
 RUN \
   mix local.hex --force && \
   mix local.rebar --force && \
-  mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez && \
   mix hex.info
 
 ENV MIX_ENV=prod REPLACE_OS_VARS=true

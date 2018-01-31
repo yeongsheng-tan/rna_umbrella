@@ -1,0 +1,17 @@
+{
+  "name": "icx_vm_host_os_base",
+    "description": "RancherOS v0.9.0",
+  "versions": [
+    {
+      "version": "20170404.0",
+      "providers": [
+        {
+          "name": "virtualbox",
+          "url": "https://s3-ap-southeast-1.amazonaws.com/ruckuslbs-sg/ICX_RancherOS_Base/boxes/rancheros_v0.9.0.box",
+          "checksum_type": "sha1",
+          "checksum": "153eb1a25038dc41b9cbf7dc4a1ded14f534985c"
+        }
+      ]
+    }
+  ]
+}

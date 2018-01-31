@@ -1,0 +1,28 @@
+FROM alpine:3.7
+
+MAINTAINER Yeong Sheng, Tan <tanyeongsheng@gmail.com>
+ENV REFRESHED_AT=2018-Jan-31 \
+    LANG=en_US.UTF-8 \
+    LC_ALL=${LANG} \
+    HOME=/opt/app/ \
+    TERM=xterm
+
+RUN \
+  echo "@edge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
+  apk --no-cache update && \
+  apk --no-cache upgrade && \
+  apk --no-cache --update add \
+    curl ca-certificates openssl ncurses tar \
+    libgcc libstdc++ protobuf@edge \
+    net-snmp@edge net-snmp-libs@edge net-snmp-tools@edge net-snmp-perl@edge \
+    "libpq@edge" "postgresql-client@edge" && \
+    # postgresql-client@edge postgresql-bdr@edge && \
+  apk --no-cache --update --allow-untrusted --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ add arp-scan@edge && \
+  rm -rf /var/cache/apk/*
+
+ENV MIX_ENV=prod REPLACE_OS_VARS=true
+
+WORKDIR /opt/app
+ADD rna_spike.tar.gz ./
+COPY rel/rna_spike_boot.sh /opt/app/bin/
+ENTRYPOINT ["/opt/app/bin/rna_spike_boot.sh"]
