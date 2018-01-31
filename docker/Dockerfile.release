@@ -23,6 +23,6 @@ RUN \
 ENV MIX_ENV=prod REPLACE_OS_VARS=true
 
 WORKDIR /opt/app
-ADD rna_spike.tar.gz ./
-COPY rel/rna_spike_boot.sh /opt/app/bin/
-ENTRYPOINT ["/opt/app/bin/rna_spike_boot.sh"]
+ADD rna_umbrella.tar.gz ./
+COPY rel/rna_umbrella_boot.sh /opt/app/bin/
+ENTRYPOINT ["/opt/app/bin/rna_umbrella_boot.sh"]

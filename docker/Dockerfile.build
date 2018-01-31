@@ -41,4 +41,4 @@ COPY . .
 # RUN mix release --profile=rna_umbrella:prod --verbose # --upgrade
 RUN mix do phx.digest, release --profile=rna_umbrella:prod --verbose && \
     tar xzf ./_build/prod/rel/rna_umbrella/releases/0.3.0/rna_umbrella.tar.gz && \
-    rm -rf ./_build ./apps ./mix.*
+    ls -alrth ./_build/prod/rel/rna_umbrella/releases/0.3.0/

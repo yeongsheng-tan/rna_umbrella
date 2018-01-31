@@ -17,21 +17,21 @@ usage() { grep '^#/' "$0" | cut -c4- ; exit 0 ; }
 expr "$*" : ".*--help" > /dev/null && usage
 
 compile_build_image() {
-  docker build -f docker/Dockerfile.build -t rna/rna-spike:build .
+  docker build -f docker/Dockerfile.build -t rna/rna_umbrella:build .
 }
 
 extract_release_tarball() {
-  docker create --name rna_spike_tmp rna/rna-spike:build
+  docker create --name rna_umbrella_tmp rna/rna_umbrella:build
 
-  rm -f ./rna_spike.tar.gz
+  rm -f ./rna_umbrella.tar.gz
 
-  docker cp rna_spike_tmp:/opt/app/_build/prod/rel/rna_spike/releases/latest/rna_spike.tar.gz .
+  docker cp rna_umbrella_tmp:/opt/app/_build/prod/rel/rna_umbrella/releases/0.3.0/rna_umbrella.tar.gz .
 
-  docker rm -f rna_spike_tmp
+  docker rm -f rna_umbrella_tmp
 }
 
 build_release_image() {
-  docker build -f docker/Dockerfile.release -t rna/rna-spike:release .
+  docker build -f docker/Dockerfile.release -t rna/rna_umbrella:release .
 }
 
 clean_images_without_tag() {

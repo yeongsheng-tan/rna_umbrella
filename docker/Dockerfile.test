@@ -46,7 +46,7 @@ RUN set -exo pipefail \
   && chmod +x /postgres-entrypoint.sh /redis-entrypoint.sh /mqtt-entrypoint.sh
 
 # Prep volume dir for postgresql, redis-server, mosquitto broker and tftp-hpa
-VOLUME ["/var/lib/postgresql/data", "/var/lib/redis/data", "/var/lib/mosquitto/data", "/var/log/mosquitto", "/var/tftpboot", "/var/log/supervisord", "/var/log/rna_spike"]
+VOLUME ["/var/lib/postgresql/data", "/var/lib/redis/data", "/var/lib/mosquitto/data", "/var/log/mosquitto", "/var/tftpboot", "/var/log/supervisord", "/var/log/rna_umbrella"]
 
 WORKDIR /
 
