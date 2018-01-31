@@ -10,9 +10,7 @@ services:
       - PG_USERNAME=postgres
     hostname: icx
     domainname: icx.com
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.2.100
+    # network_mode: "host"
     ports:
       - "8000:9000"
     depends_on:
@@ -21,18 +19,12 @@ services:
       - mosquitto_broker2
 
   postgres:
-    image: postgres:9.6.2
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.2.10
+    image: postgres:10.1
     ports:
       - "5432"
 
   mosquitto_broker1:
     image: erlio/docker-vernemq
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.2.50
     ports:
       - "3883:1883"
     environment:
@@ -40,19 +32,8 @@ services:
 
   mosquitto_broker2:
     image: erlio/docker-vernemq 
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.2.52
     environment:
       - DOCKER_VERNEMQ_ALLOW_ANONYMOUS=on 
-      - DOCKER_VERNEMQ_DISCOVERY_NODE=10.5.2.50
+      - DOCKER_VERNEMQ_DISCOVERY_NODE=mosquitto_broker1
     depends_on:
       - mosquitto_broker1
-
-networks:
-  vpcbr:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 10.5.2.0/16

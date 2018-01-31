@@ -1,7 +1,7 @@
-FROM leifg/elixir:latest
+FROM leifg/elixir:edge
 
 MAINTAINER Yeong Sheng, Tan <tanyeongsheng@gmail.com>
-ENV REFRESHED_AT=2017-Mar-29 \
+ENV REFRESHED_AT=2018-Jan-31 \
     SHELL=/bin/sh \
     LANG=en_US.UTF-8 \
     LC_ALL=${LANG} \
@@ -15,6 +15,8 @@ RUN \
     apk --no-cache --update add \
       libgcc libstdc++ protobuf@edge \
       net-snmp@edge net-snmp-libs@edge net-snmp-tools@edge net-snmp-perl@edge && \
+    apk --no-cache --update --allow-untrusted --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ add \
+      arp-scan@edge && \
     rm -rf /var/cache/apk/*
 
 ENV MIX_ENV=prod REPLACE_OS_VARS=true

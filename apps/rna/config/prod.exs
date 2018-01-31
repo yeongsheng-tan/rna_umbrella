@@ -1,7 +1,7 @@
 use Mix.Config
 
 config :bus,
-  host: '10.5.2.50',
+  host: 'mosquitto_broker1',
  	port: 1883,
  	client_id: "Rna.SNMP_Poller", #needs to be string.
   keep_alive: 30, #this is in seconds.

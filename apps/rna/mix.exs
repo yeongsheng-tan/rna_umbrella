@@ -8,7 +8,7 @@ defmodule Rna.Mixfile do
      config_path: "../../config/config.exs",
      deps_path: "../../deps",
      lockfile: "../../mix.lock",
-     elixir: "~> 1.4",
+     elixir: "~> 1.6",
      elixirc_paths: elixirc_paths(Mix.env),
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -33,10 +33,10 @@ defmodule Rna.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [{:net_snmp_ex, git: "https://github.com/jonnystorm/net-snmp-elixir.git", app: false},
-     {:protox, "~> 0.12"},
-     {:quantum, "~> 1.9"},
+     {:protox, "~> 0.16"},
+     {:quantum, "~> 2.2"},
      {:bus, "~> 0.1.4"},
-     {:ex_doc, "~> 0.15", only: :dev}
+     {:ex_doc, "~> 0.18", only: :dev}
     ]
   end
 

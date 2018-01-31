@@ -3,8 +3,8 @@ A simple ICX SNMP query/response over REST API with Phoenix/Elixir PoC
 
 ### Up & running on OSX macOS
 1. Install OSX net-snmp binaries `brew install net-snmp`
-2. Install elixir `brew install elixir` (current project state is running with elixir 1.4.2)
-3. Install phoenix 1.3-rc-1 `mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_new.ez` (see https://elixirforum.com/t/phoenix-v1-3-0-rc-0-released/3947 and https://github.com/phoenixframework/phoenix/blob/master/CHANGELOG.md)
+2. Install elixir `brew install elixir` (current project state is running with elixir 1.6.1)
+3. Install phoenix 1.3.0
 4. Update local hex packages index `mix local.hex`
 5. From root of this project install dependencies `mix deps.get`
 6. Startup phoenix umbrella app `mix phx.server` (i.e. rna_web and rna)

@@ -1,26 +1,13 @@
-FROM leifg/elixir:latest
+FROM leifg/elixir:edge
 
 MAINTAINER Yeong Sheng, Tan <tanyeongsheng@gmail.com>
 # Tooling from hex mix_docker expects app install to be in /opt/app
-ENV REFRESHED_AT=2017-Mar-29 \
+ENV REFRESHED_AT=2018-Jan-31 \
     SHELL=/bin/sh \
     LANG=en_US.UTF-8 \
     LC_ALL=${LANG} \
     HOME=/opt/app/ \
     TERM=xterm
-
-# Base Erlang packages required:
-# erlang-kernel (19.3.0-r0)
-# erlang-stdlib (19.3.0-r0)
-# erlang-compiler (19.3.0-r0)
-# erlang (19.3.0-r0)
-# erlang-inets (19.3.0-r0)
-# erlang-ssl (19.3.0-r0)
-# erlang-public-key (19.3.0-r0)
-# erlang-asn1 (19.3.0-r0)
-# erlang-sasl (19.3.0-r0)
-# erlang-erl-interface (19.3.0-r0)
-# erlang-dev (19.3.0-r0)
 
 RUN \
     echo "@edge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
@@ -32,7 +19,6 @@ RUN \
 # Install Hex+Rebar
 RUN mix local.hex --force && \
     mix local.rebar --force && \
-    mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez && \
     mix hex.info
 
 ENV MIX_ENV=prod REPLACE_OS_VARS=true

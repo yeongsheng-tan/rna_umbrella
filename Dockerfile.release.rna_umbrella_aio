@@ -1,7 +1,7 @@
-FROM bitwalker/alpine-elixir:1.4.2
+FROM bitwalker/alpine-elixir:1.6.1
 
 MAINTAINER Yeong Sheng, Tan <tanyeongsheng@gmail.com>
-ENV REFRESHED_AT=2017-Mar-29 \
+ENV REFRESHED_AT=2018-Jan-31 \
     SHELL=/bin/sh \
     LANG=en_US.UTF-8 \
     LC_ALL=${LANG} \
